@@ -15,7 +15,8 @@ public static class PreliminarySetup
     public static async void Setup()
     {
 #if UNITY_EDITOR
-        if (Application.isPlaying && SceneManager.GetActiveScene().buildIndex is not 0)
+        var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (Application.isPlaying && currentSceneIndex is not 0)
         {
             await SceneManager.LoadSceneAsync(0);
             ClearConsole();
@@ -24,6 +25,13 @@ public static class PreliminarySetup
         var setups = GetAllPreliminarySetups().OrderBy(setup => setup.Order);
         foreach (var setup in setups)
             setup.Setup();
+
+#if UNITY_EDITOR
+        await SceneManager.LoadSceneAsync(currentSceneIndex);
+#else
+        // Scene 1 should be scene that always runs after prelimenary setup scene.
+        await SceneManager.LoadSceneAsync(1);
+#endif
     }
 
     private static IEnumerable<IPreliminarySetup> GetAllPreliminarySetups()
