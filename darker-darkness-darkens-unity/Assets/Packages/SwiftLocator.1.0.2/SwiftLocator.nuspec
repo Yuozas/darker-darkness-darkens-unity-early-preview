@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SwiftLocator</id>
+    <version>1.0.2</version>
+    <title>Swift Locator</title>
+    <authors>euphelia</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>Logo.png</icon>
+    <readme>NuGet-README.md</readme>
+    <description>This package handles a simple service locator with dependency injection or without.</description>
+    <releaseNotes>Major dependency injection bug fix.</releaseNotes>
+    <copyright>2023</copyright>
+    <tags>service locator, dependency injector</tags>
+    <repository type="git" url="https://github.com/Euphelia-Interactive/SwiftLocator" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.8" />
+      <group targetFramework="net5.0" />
+    </dependencies>
+  </metadata>
+</package>
