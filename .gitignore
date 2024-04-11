@@ -1,0 +1,84 @@
+# This .gitignore file is tailored for Unity game projects.
+
+# Ignore all files and folders starting with a dot except the .gitignore file itself
+.* 
+!.gitignore
+
+# Ignore specific Unity file types and folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Ignore Visual Studio / Rider / VSCode / MonoDevelop project files and user-specific files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+.vs/
+.vscode/
+.idea/
+*.csproj.DotSettings.user
+
+# Ignore macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnail cache files
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Exclude node_modules folder in case of Unity/WebGL projects that might use npm packages
+node_modules/
+
+# Exclude Visual Studio Code settings
+.settings/
+
+# Exclude temporary files that can be created if a process still has a handle open of a deleted file
+*.swp
+*.swo
+
+# Exclude Unity3D generated meta files for Asset Store packages installed directly into the project
+# Asset meta files should not be ignored if you're sharing assets within the team or publicly
+# Uncomment the following line if you're using git for unity package management and all assets are version controlled
+# !/[Aa]ssets/**/*.meta
