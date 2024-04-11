@@ -17,7 +17,7 @@ public class ServiceRegistrator : IPreliminarySetup
             .Register(new SavesConfiguration()
             {
                 CurrentSave = "1.db",
-                LocationPath = Path.Combine(Application.persistentDataPath, "_Saves")
+                LocationPath = Path.Combine(Application.streamingAssetsPath, "_Saves")
             })
             .Register<IDatabaseService, DatabaseService>();
     }
