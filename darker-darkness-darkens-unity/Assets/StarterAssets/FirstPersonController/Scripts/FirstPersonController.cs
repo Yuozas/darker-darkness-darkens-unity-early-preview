@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Fusion;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -6,6 +7,7 @@ using UnityEngine.InputSystem;
 namespace StarterAssets
 {
 	[RequireComponent(typeof(CharacterController))]
+	[RequireComponent (typeof(NetworkCharacterController))]
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
@@ -68,7 +70,8 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 		private PlayerInput _playerInput;
 #endif
-		private CharacterController _controller;
+        private NetworkCharacterController _networkCharacterController;
+        private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
@@ -104,9 +107,27 @@ namespace StarterAssets
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
+			// Setup network controller.
+			_networkCharacterController = GetComponent<NetworkCharacterController>();
+			if (_networkCharacterController != null)
+			{
+                _networkCharacterController.gravity = Gravity;
+                _networkCharacterController.jumpImpulse = JumpHeight;
+                _networkCharacterController.acceleration = SpeedChangeRate;
+                _networkCharacterController.braking = SpeedChangeRate;
+                _networkCharacterController.maxSpeed = SprintSpeed;
+                _networkCharacterController.rotationSpeed = RotationSpeed;
+                Debug.Log("Successfully added network character controller.");
+            }
+			else
+			{
+                Debug.LogWarning("Failed to add network character controller.");
+            }
 
-			// reset our timeouts on start
-			_jumpTimeoutDelta = JumpTimeout;
+
+
+            // reset our timeouts on start
+            _jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 		}
 
@@ -146,15 +167,19 @@ namespace StarterAssets
 				// Update Cinemachine camera target pitch
 				CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
+
+
 				// rotate the player left and right
-				transform.Rotate(Vector3.up * _rotationVelocity);
-			}
-		}
+                _networkCharacterController.Teleport(null, Quaternion.Euler(0.0f, _rotationVelocity, 0.0f));
+
+                // transform.Rotate(Vector3.up * _rotationVelocity);
+            }
+        }
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -194,12 +219,20 @@ namespace StarterAssets
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 			}
 
-			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		}
 
-		private void JumpAndGravity()
-		{
+            _networkCharacterController.Grounded = Grounded;
+			if(_input.jump)
+				_networkCharacterController.Jump();
+
+            _networkCharacterController.Move(inputDirection);
+            // move the player
+            //var newPosition = inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            //_controller.Move(newPosition);
+        }
+
+        private void JumpAndGravity()
+        {
+			return;
 			if (Grounded)
 			{
 				// reset the fall timeout timer
@@ -244,7 +277,7 @@ namespace StarterAssets
 			{
 				_verticalVelocity += Gravity * Time.deltaTime;
 			}
-		}
+        }
 
 		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 		{
