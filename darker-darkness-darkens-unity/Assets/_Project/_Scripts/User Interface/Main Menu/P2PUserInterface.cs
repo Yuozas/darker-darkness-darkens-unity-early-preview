@@ -1,7 +1,5 @@
 using SwiftLocator.Services.ServiceLocatorServices;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class P2PUserInterface : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class P2PUserInterface : MonoBehaviour
             var succesfullyHosted = await _p2pNetworkManager.StartHost();
             if (succesfullyHosted)
             {
-                await LoadGameScene();
+                //await _p2pNetworkManager.LoadScene();
                 return;
             }
             GUILayout.Label("Failed to host game...");
@@ -34,7 +32,7 @@ public class P2PUserInterface : MonoBehaviour
             var succesfullyJoined = await _p2pNetworkManager.StartClient(hostIP);
             if(succesfullyJoined)
             {
-                await LoadGameScene();
+                //await _p2pNetworkManager.LoadScene();
                 return;
             }
 
@@ -42,11 +40,5 @@ public class P2PUserInterface : MonoBehaviour
         }
 
         GUILayout.EndHorizontal();
-    }
-
-    // Temporary.
-    private async Task LoadGameScene()
-    {
-        await SceneManager.LoadSceneAsync(2);
     }
 }

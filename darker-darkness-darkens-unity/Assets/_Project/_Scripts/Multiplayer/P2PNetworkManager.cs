@@ -4,10 +4,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using WebSocketSharp;
 
+[RequireComponent(typeof(NetworkRunner))]
 public class P2PNetworkManager : MonoBehaviour
 {
-    public NetworkRunner runnerPrefab; // Assign in inspector
-    private NetworkRunner runnerInstance;
+    private NetworkRunner _networkRunner;
+
+    private void Awake()
+    {
+        _networkRunner = GetComponent<NetworkRunner>();    
+    }
 
     private void Start()
     {
@@ -17,7 +22,7 @@ public class P2PNetworkManager : MonoBehaviour
 
     public NetworkRunner GetNetworkRunner()
     {
-        return runnerInstance;
+        return _networkRunner;
     }
 
     public Task<bool> StartHost()
@@ -32,20 +37,26 @@ public class P2PNetworkManager : MonoBehaviour
 
     private async Task<bool> StartRunner(GameMode mode, string hostIP = null)
     {
-        runnerInstance = Instantiate(runnerPrefab);
         var startArgs = new StartGameArgs
         {
             GameMode = mode,
             SessionName = "P2PSession",
+            Scene = SceneRef.FromIndex(2),
             Address = hostIP is null ? NetAddress.LocalhostIPv4() : NetAddress.CreateFromIpPort(hostIP, 0),
         };
 
-        var result = await runnerInstance.StartGame(startArgs);
+        var result = await _networkRunner.StartGame(startArgs);
         if (!result.ErrorMessage.IsNullOrEmpty() && !string.Equals(result.ErrorMessage, "ok", System.StringComparison.OrdinalIgnoreCase))
         {
             Debug.LogError($"Error starting game: {result.ErrorMessage}");
             return false;
         }
         return true;
+    }
+
+    public async Task LoadScene(int index = 2)    {
+        await _networkRunner.LoadScene(SceneRef.FromIndex(index));
+        //var spawner = GetComponent<PlayerNetworkSpawner>();
+        //spawner.SpawnPlayers(index);
     }
 }

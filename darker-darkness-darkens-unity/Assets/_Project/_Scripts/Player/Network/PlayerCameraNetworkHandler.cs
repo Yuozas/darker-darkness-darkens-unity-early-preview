@@ -3,11 +3,12 @@ using Fusion;
 using SwiftLocator.Services.ServiceLocatorServices;
 using UnityEngine;
 
-public class PlayerCameraHandler : NetworkBehaviour
+public class PlayerCameraNetworkHandler : NetworkBehaviour
 {
     public override void Spawned()
     {
-        Debug.Log("spawned");
+        base.Spawned();
+
         var localNetworkRunner = ServiceLocator.GetSingleton<P2PNetworkManager>().GetNetworkRunner();
         Debug.Log($"{localNetworkRunner.UserId != Runner.UserId}, {localNetworkRunner.UserId}, {Runner.UserId}");
         if (localNetworkRunner.UserId != Runner.UserId)
@@ -16,6 +17,6 @@ public class PlayerCameraHandler : NetworkBehaviour
         // Temporary.
         var virtualCamera = FindFirstObjectByType<CinemachineVirtualCamera>();
         virtualCamera.Follow = transform;
-        Debug.Log("changed camera transform");
+        Debug.Log("Cameras setup.");
     }
 }
