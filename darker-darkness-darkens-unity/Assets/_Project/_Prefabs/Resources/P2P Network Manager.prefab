@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2486604024802031363}
   - component: {fileID: 6239828203299746825}
   - component: {fileID: 8836442270106314243}
+  - component: {fileID: 6308292273948171308}
   m_Layer: 5
   m_Name: P2P Network Manager
   m_TagString: Untagged
@@ -49,6 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fc1d7eb14e24042ab52206250e1eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerPrefab:
+    RawGuidValue: 01e648ada5f0ef34993381af6f433096
 --- !u!114 &8836442270106314243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,3 +64,17 @@ MonoBehaviour:
   m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6308292273948171308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5251384757167835808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a93abf1a391964a94e5c139605105b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsSceneTakeOverEnabled: 1
+  LogSceneLoadErrors: 1
