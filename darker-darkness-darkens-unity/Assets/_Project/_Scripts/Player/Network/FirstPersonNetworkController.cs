@@ -1,4 +1,3 @@
-using Fusion;
 using StarterAssets;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
@@ -9,7 +8,7 @@ using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
 #endif
-public class FirstPersonNetworkController : NetworkBehaviour
+public class FirstPersonNetworkController : MonoBehaviour
 {
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
@@ -108,21 +107,15 @@ public class FirstPersonNetworkController : NetworkBehaviour
 #endif
     }
 
-    public override void FixedUpdateNetwork()
-    {
-        // Temporary check. Weird bug when added to awake. FixedUpdateNetwork called before map is loaded character falls under the map.
-        if (_input == null)
-            return;
-
+    private void Update() {
         JumpAndGravity();
         GroundedCheck();
         Move();
-        CameraRotation();
     }
 
     private void LateUpdate()
     {
-        
+        CameraRotation();
     }
 
     private void GroundedCheck()
@@ -176,7 +169,7 @@ public class FirstPersonNetworkController : NetworkBehaviour
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Runner.DeltaTime * SpeedChangeRate);
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
 
             // round speed to 3 decimal places
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -198,7 +191,7 @@ public class FirstPersonNetworkController : NetworkBehaviour
         }
 
         // move the player
-        _controller.Move(inputDirection.normalized * (_speed * Runner.DeltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Runner.DeltaTime);
+        _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
     }
 
     private void JumpAndGravity()
@@ -224,7 +217,7 @@ public class FirstPersonNetworkController : NetworkBehaviour
             // jump timeout
             if (_jumpTimeoutDelta >= 0.0f)
             {
-                _jumpTimeoutDelta -= Runner.DeltaTime;
+                _jumpTimeoutDelta -= Time.deltaTime;
             }
         }
         else
@@ -235,7 +228,7 @@ public class FirstPersonNetworkController : NetworkBehaviour
             // fall timeout
             if (_fallTimeoutDelta >= 0.0f)
             {
-                _fallTimeoutDelta -= Runner.DeltaTime;
+                _fallTimeoutDelta -= Time.deltaTime;
             }
 
             // if we are not grounded, do not jump
@@ -245,7 +238,7 @@ public class FirstPersonNetworkController : NetworkBehaviour
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += Gravity * Runner.DeltaTime;
+            _verticalVelocity += Gravity * Time.deltaTime;
         }
     }
 

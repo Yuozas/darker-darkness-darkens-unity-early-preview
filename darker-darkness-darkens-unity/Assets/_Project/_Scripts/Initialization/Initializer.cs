@@ -12,7 +12,7 @@ public class Initializer : IPreliminarySetup
         ServiceLocator.SingletonRegistrator
             .Register(provider => 
             {
-                var prefab = Resources.Load<P2PNetworkManager>(P2P_NETWORK_MANAGER_PREFAB_NAME);
+                var prefab = Resources.Load<CustomNetworkManager>(P2P_NETWORK_MANAGER_PREFAB_NAME);
                 return Instantiator.InstantiateAndDontDestroy(prefab);
             });
     }
