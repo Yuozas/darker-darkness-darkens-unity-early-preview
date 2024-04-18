@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7787473769059023483}
   - component: {fileID: 5544243808891491801}
   - component: {fileID: -9138268860090816832}
-  - component: {fileID: -1548055465867094723}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Untagged
@@ -100,20 +99,3 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
---- !u!114 &-1548055465867094723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7910256396790152927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 2590787020
-  serverOnly: 0
-  visibility: 0
-  hasSpawned: 0
