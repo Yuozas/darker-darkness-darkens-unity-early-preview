@@ -61,7 +61,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: Assets/Scenes/Cabin.unity
   transport: {fileID: 6465910832306015698}
-  networkAddress: localhost
+  networkAddress: 192.168.1.199
   maxConnections: 5
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -70,7 +70,9 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 5809413223316763969, guid: b8446986f2248d24bb062c800ac32f1b, type: 3}
+  - {fileID: 7910256396790152927, guid: 9e3d8ea4715186c40afd41eb3347d469, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -98,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7777
+  port: 6666
   NoDelay: 1
   SendTimeout: 5000
   ReceiveTimeout: 30000

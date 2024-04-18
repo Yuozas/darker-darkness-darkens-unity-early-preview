@@ -1,3 +1,4 @@
+using System.Collections;
 using StarterAssets;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
@@ -6,7 +7,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerSetup))]
 #endif
 public class FirstPersonNetworkController : MonoBehaviour
 {
@@ -72,13 +73,13 @@ public class FirstPersonNetworkController : MonoBehaviour
     private GameObject _mainCamera;
 
     private const float _threshold = 0.01f;
-
+    
     private bool IsCurrentDeviceMouse
     {
         get
         {
 #if ENABLE_INPUT_SYSTEM
-            return _playerInput.currentControlScheme == "KeyboardMouse";
+            return _playerInput?.currentControlScheme == "KeyboardMouse";
 #else
 				return false;
 #endif
@@ -91,23 +92,35 @@ public class FirstPersonNetworkController : MonoBehaviour
         if (_mainCamera == null)
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
-
-    private void Start()
+    
+    private IEnumerator Start() 
     {
         // reset our timeouts on start
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
 
         _controller = GetComponent<CharacterController>();
-        _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
-        _playerInput = GetComponent<PlayerInput>();
+        _playerInput = GetComponentInChildren<PlayerInput>();
+        Debug.Log($"{_playerInput == null} _playerInput == null");
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
+        yield return new WaitForSeconds(5);
+#if ENABLE_INPUT_SYSTEM
+        _playerInput = GetComponentInChildren<PlayerInput>();
+        Debug.Log($"{_playerInput == null} _playerInput == null");
+#else
+			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+#endif
+        
+        _input = GetComponent<StarterAssetsInputs>();
+
     }
 
     private void Update() {
+        if (_input == null || _playerInput == null)
+            return;
         JumpAndGravity();
         GroundedCheck();
         Move();
@@ -115,6 +128,8 @@ public class FirstPersonNetworkController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (_input == null || _playerInput == null)
+            return;
         CameraRotation();
     }
 

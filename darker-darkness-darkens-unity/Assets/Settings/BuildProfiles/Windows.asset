@@ -20,8 +20,6 @@ MonoBehaviour:
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/Scenes/Cabin.unity
-  - m_enabled: 1
-    m_path: Assets/Scenes/SampleScene.unity
   references:
     version: 2
     RefIds:
