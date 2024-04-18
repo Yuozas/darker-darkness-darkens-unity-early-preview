@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
+	using System.Collections;
 	public class StarterAssetsInputs : MonoBehaviour
 	{
 		[Header("Character Input Values")]
@@ -19,31 +20,64 @@ namespace StarterAssets
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
+		
+		private PlayerInput _playerInput;
 
-#if ENABLE_INPUT_SYSTEM
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
+		private IEnumerator Start() {
+			yield return new WaitForSeconds(5);
+			_playerInput = GetComponentInChildren<PlayerInput>();
 		}
 
-		public void OnLook(InputValue value)
-		{
-			if(cursorInputForLook)
-			{
-				LookInput(value.Get<Vector2>());
+		private void Update() {
+			if (_playerInput == null)
+				return;
+			
+			var moveAction = _playerInput.currentActionMap.FindAction("Move", true);
+			
+			var lookAction = _playerInput.currentActionMap.FindAction("Look", true);
+			
+			var jumpAction = _playerInput.currentActionMap.FindAction("Jump", true);
+			
+			var sprintAction = _playerInput.currentActionMap.FindAction("Sprint", true);
+			
+			var move = moveAction.ReadValue<Vector2>();
+			MoveInput(move);
+
+			if (cursorInputForLook) {
+				var look = lookAction.ReadValue<Vector2>();
+				LookInput(look);
 			}
-		}
 
-		public void OnJump(InputValue value)
-		{
-			JumpInput(value.isPressed);
-		}
+			var jump = jumpAction.triggered;
+				JumpInput(jump);
 
-		public void OnSprint(InputValue value)
-		{
-			SprintInput(value.isPressed);
+				var sprint = sprintAction.triggered;
+			SprintInput(jump);
 		}
-#endif
+// 		
+// 		public void OnMove(InputAction.CallbackContext value)
+// 		{
+// 			MoveInput(value.ReadValue<Vector2>());
+// 		}
+//
+// 		public void OnLook(InputAction.CallbackContext value)
+// 		{
+// 			if(cursorInputForLook)
+// 			{
+// 				LookInput(value.Get<Vector2>());
+// 			}
+// 		}
+//
+// 		public void OnJump(InputAction.CallbackContext value)
+// 		{
+// 			JumpInput(value.ReadValueAsButton());
+// 		}
+//
+// 		public void OnSprint(InputAction.CallbackContext value)
+// 		{
+// 			SprintInput(value.isPressed);
+// 		}
+// #endif
 
 
 		public void MoveInput(Vector2 newMoveDirection)
