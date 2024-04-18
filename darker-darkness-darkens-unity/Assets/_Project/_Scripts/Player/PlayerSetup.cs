@@ -41,9 +41,12 @@ public class PlayerSetup : NetworkBehaviour
     
     virtualCamera.Follow = _cinemachineCameraTarget.transform;
     Debug.Log("Camera setup for local player.");
-
-    var playerInputInstance = Instantiate(_playerInputPrefab, transform);
+    var playerInputInstance = Instantiate(_playerInputPrefab);
+    
     var playerInput = playerInputInstance.GetComponent<PlayerInput>();
+    var inputs = playerInputInstance.GetComponent<Inputs>();
+    var firstPersonNetworkController = GetComponent<FirstPersonNetworkController>();
+    firstPersonNetworkController.SetupPlayerInput(playerInput, inputs);
     playerInput.camera = playerCameraInstance.GetComponentInChildren<Camera>();
     
     Debug.Log("Input setup for local player.");

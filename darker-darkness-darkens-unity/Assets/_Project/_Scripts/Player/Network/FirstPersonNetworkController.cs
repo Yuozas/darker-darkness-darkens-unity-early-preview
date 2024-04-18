@@ -66,20 +66,25 @@ public class FirstPersonNetworkController : MonoBehaviour
 
 
 #if ENABLE_INPUT_SYSTEM
-    private PlayerInput _playerInput;
+    public PlayerInput _playerInput;
 #endif
     private CharacterController _controller;
-    private StarterAssetsInputs _input;
+    private Inputs _input;
     private GameObject _mainCamera;
 
     private const float _threshold = 0.01f;
+
+    public void SetupPlayerInput(PlayerInput playerInput, Inputs inputs) {
+        _input = inputs;
+        _playerInput = playerInput;
+    }
     
     private bool IsCurrentDeviceMouse
     {
         get
         {
 #if ENABLE_INPUT_SYSTEM
-            return _playerInput?.currentControlScheme == "KeyboardMouse";
+            return _playerInput.currentControlScheme == "KeyboardMouse";
 #else
 				return false;
 #endif
@@ -93,29 +98,13 @@ public class FirstPersonNetworkController : MonoBehaviour
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
     
-    private IEnumerator Start() 
+    private void Start() 
     {
         // reset our timeouts on start
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
 
         _controller = GetComponent<CharacterController>();
-#if ENABLE_INPUT_SYSTEM
-        _playerInput = GetComponentInChildren<PlayerInput>();
-        Debug.Log($"{_playerInput == null} _playerInput == null");
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
-        yield return new WaitForSeconds(5);
-#if ENABLE_INPUT_SYSTEM
-        _playerInput = GetComponentInChildren<PlayerInput>();
-        Debug.Log($"{_playerInput == null} _playerInput == null");
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
-        
-        _input = GetComponent<StarterAssetsInputs>();
-
     }
 
     private void Update() {
