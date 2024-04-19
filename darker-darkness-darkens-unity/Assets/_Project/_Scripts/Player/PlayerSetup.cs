@@ -12,14 +12,14 @@ public class PlayerSetup : NetworkBehaviour
   
   [Header("Player input")]
   [SerializeField] private GameObject _playerInputPrefab;
-  
+
   public override void OnStartLocalPlayer()
   {
-    CmdSpawnPlayerCamera();
+    CmdInstantiatePlayerPrefabs();
   }
   
   [Command]
-  private void CmdSpawnPlayerCamera()
+  private void CmdInstantiatePlayerPrefabs()
   {
     RpcSetup();
   }
@@ -27,21 +27,18 @@ public class PlayerSetup : NetworkBehaviour
   [ClientRpc]
   private void RpcSetup()
   {
-    // This check ensures that only the local player sets up the camera.
     if (!isLocalPlayer)
       return;
     
     var playerCameraInstance = Instantiate(_playerCameraPrefab);
-    // NetworkServer.Spawn(playerCameraInstance, connectionToClient);
+    Debug.Log("Camera instantiated");
     
-    // Now on the client, set the camera's follow target.
     var virtualCamera = playerCameraInstance.GetComponentInChildren<CinemachineVirtualCamera>();
-    if (virtualCamera == null || _cinemachineCameraTarget == null)
-      throw new Exception("Failed to retrieve camera from child.");
-    
     virtualCamera.Follow = _cinemachineCameraTarget.transform;
     Debug.Log("Camera setup for local player.");
+    
     var playerInputInstance = Instantiate(_playerInputPrefab);
+    Debug.Log("Player Input instantiated.");
     
     var playerInput = playerInputInstance.GetComponent<PlayerInput>();
     var inputs = playerInputInstance.GetComponent<Inputs>();

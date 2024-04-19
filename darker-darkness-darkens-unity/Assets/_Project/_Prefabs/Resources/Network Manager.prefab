@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6526624556801643545}
   - component: {fileID: -3365028907553367538}
   m_Layer: 5
-  m_Name: P2P Network Manager
+  m_Name: Network Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,8 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 8237962200384571329, guid: ca0d526101d29e1439325c6b29b287ff, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -86,6 +87,8 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
+  _voiceChatPrefab: {fileID: 8237962200384571329, guid: ca0d526101d29e1439325c6b29b287ff,
+    type: 3}
 --- !u!114 &6465910832306015698
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -251,6 +251,7 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 4135013735270702863}
   TopClamp: 89
   BottomClamp: -89
+  _playerInput: {fileID: 0}
 --- !u!114 &5158782135882277749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +271,8 @@ MonoBehaviour:
   _playerCameraPrefab: {fileID: 5809413223316763969, guid: b8446986f2248d24bb062c800ac32f1b,
     type: 3}
   _playerInputPrefab: {fileID: 7910256396790152927, guid: 9e3d8ea4715186c40afd41eb3347d469,
+    type: 3}
+  _voiceChatPrefab: {fileID: 8237962200384571329, guid: ca0d526101d29e1439325c6b29b287ff,
     type: 3}
 --- !u!114 &1743899406621327060
 MonoBehaviour:
