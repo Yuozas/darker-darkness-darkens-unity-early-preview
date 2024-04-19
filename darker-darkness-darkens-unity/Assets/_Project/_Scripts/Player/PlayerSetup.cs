@@ -13,6 +13,9 @@ public class PlayerSetup : NetworkBehaviour
   [Header("Player input")]
   [SerializeField] private GameObject _playerInputPrefab;
 
+  [Header("Voide chat")]
+  [SerializeField] private GameObject _voiceChatPrefab;
+  
   public override void OnStartLocalPlayer()
   {
     CmdInstantiatePlayerPrefabs();
@@ -31,7 +34,11 @@ public class PlayerSetup : NetworkBehaviour
       return;
     
     var playerCameraInstance = Instantiate(_playerCameraPrefab);
-    Debug.Log("Camera instantiated");
+    Debug.Log("Camera instantiated.");
+    
+    var voiceChatInstance = Instantiate(_voiceChatPrefab);
+    Debug.Log("Voice instantiated.");
+    NetworkServer.Spawn(voiceChatInstance, connectionToClient);
     
     var virtualCamera = playerCameraInstance.GetComponentInChildren<CinemachineVirtualCamera>();
     virtualCamera.Follow = _cinemachineCameraTarget.transform;
