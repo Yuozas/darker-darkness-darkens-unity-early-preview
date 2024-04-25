@@ -20,23 +20,20 @@ namespace Euphelia.Player
 
 		[Header("Voice chat")][SerializeField] private GameObject _voiceChatPrefab;
 
-		public override void OnStartLocalPlayer() => CmdInstantiatePlayerPrefabs();
-
-		[Command]
-		private void CmdInstantiatePlayerPrefabs() => RpcSetup();
-
-		[ClientRpc]
-		private void RpcSetup()
+		public override void OnStartLocalPlayer()
 		{
 			if (!isLocalPlayer)
 				return;
 
+			Debug.Log($"Started setup for netId:{netId}");
+
 			var playerCameraInstance = Instantiate(_playerCameraPrefab);
 			Debug.Log("Camera instantiated.");
 
-			var voiceChatInstance = Instantiate(_voiceChatPrefab);
+			SpawnPlayerPrefabs(connectionToClient);
+			// var voiceChatInstance = Instantiate(_voiceChatPrefab);
 			Debug.Log("Voice instantiated.");
-			NetworkServer.Spawn(voiceChatInstance, connectionToClient);
+			// NetworkServer.Spawn(voiceChatInstance, connectionToClient);
 
 			var virtualCamera = playerCameraInstance.GetComponentInChildren<CinemachineVirtualCamera>();
 			virtualCamera.Follow = _cinemachineCameraTarget.transform;
@@ -52,6 +49,13 @@ namespace Euphelia.Player
 			playerInput.camera = playerCameraInstance.GetComponentInChildren<Camera>();
 
 			Debug.Log("Input setup for local player.");
+		}
+
+		[Command]
+		private void SpawnPlayerPrefabs(NetworkConnectionToClient senderConnection)
+		{
+			var voiceChatInstance = Instantiate(_voiceChatPrefab, transform);
+			NetworkServer.Spawn(voiceChatInstance, senderConnection);
 		}
 	}
 }
