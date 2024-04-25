@@ -1,35 +1,46 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class BasicNetworkRigidBodyPush : MonoBehaviour
+namespace Euphelia.Player.Network
 {
-    public LayerMask pushLayers;
-    public bool canPush;
-    [Range(0.5f, 5f)] public float strength = 1.1f;
+	public class BasicNetworkRigidBodyPush : MonoBehaviour
+	{
+		[FormerlySerializedAs("pushLayers")] public LayerMask PushLayers;
+		[FormerlySerializedAs("canPush")]    public bool      CanPush;
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (canPush) PushRigidBodies(hit);
-    }
+		[FormerlySerializedAs("strength")]
+		[Range(0.5f, 5f)]
+		public float Strength = 1.1f;
 
-    private void PushRigidBodies(ControllerColliderHit hit)
-    {
-        // https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html
+		private void OnControllerColliderHit(ControllerColliderHit hit)
+		{
+			if (CanPush)
+				PushRigidBodies(hit);
+		}
 
-        // make sure we hit a non kinematic rigidbody
-        Rigidbody body = hit.collider.attachedRigidbody;
-        if (body == null || body.isKinematic) return;
+		private void PushRigidBodies(ControllerColliderHit hit)
+		{
+			// https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html
 
-        // make sure we only push desired layer(s)
-        var bodyLayerMask = 1 << body.gameObject.layer;
-        if ((bodyLayerMask & pushLayers.value) == 0) return;
+			// make sure we hit a non-kinematic rigid body
+			var body = hit.collider.attachedRigidbody;
+			if (body == null || body.isKinematic)
+				return;
 
-        // We dont want to push objects below us
-        if (hit.moveDirection.y < -0.3f) return;
+			// make sure we only push desired layer(s)
+			var bodyLayerMask = 1 << body.gameObject.layer;
+			if ((bodyLayerMask & PushLayers.value) == 0)
+				return;
 
-        // Calculate push direction from move direction, horizontal motion only
-        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
+			// We don't want to push objects below us
+			if (hit.moveDirection.y < -0.3f)
+				return;
 
-        // Apply the push and take strength into account
-        body.AddForce(pushDir * strength, ForceMode.Impulse);
-    }
+			// Calculate push direction from move direction, horizontal motion only
+			var pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
+
+			// Apply the push and take strength into account
+			body.AddForce(pushDir * Strength, ForceMode.Impulse);
+		}
+	}
 }

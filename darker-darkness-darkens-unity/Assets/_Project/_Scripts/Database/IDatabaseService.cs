@@ -1,6 +1,9 @@
 ﻿using LiteDB;
 
-public interface IDatabaseService
+namespace Euphelia.Database
 {
-    LiteDatabase GetContext();
+	public interface IDatabaseService
+	{
+		LiteDatabase GetContext();
+	}
 }

@@ -1,9 +1,12 @@
 ﻿using System.IO;
 
-public class SavesConfiguration
+namespace Euphelia.Database
 {
-    public string LocationPath { get; set; }
-    public string CurrentSave { get; set; }
+	public class SavesConfiguration
+	{
+		public string LocationPath { get; set; }
+		public string CurrentSave  { get; set; }
 
-    public string CurrentSavePath => Path.Combine(LocationPath, CurrentSave);
+		public string CurrentSavePath => Path.Combine(LocationPath, CurrentSave);
+	}
 }
