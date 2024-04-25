@@ -1,77 +1,58 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
+using UnityEngine.Serialization;
 
-public class Inputs : MonoBehaviour
+namespace Euphelia.Player
 {
-	[Header("Character Input Values")]
-	public Vector2 move;
-	public Vector2 look;
-	public bool jump;
-	public bool sprint;
-
-	[Header("Movement Settings")]
-	public bool analogMovement;
-
-	[Header("Mouse Cursor Settings")]
-	public bool cursorLocked = true;
-	public bool cursorInputForLook = true;
-		
-#if ENABLE_INPUT_SYSTEM
-		
-		
-	public void OnMove(InputValue value)
+	public class Inputs : MonoBehaviour
 	{
-		MoveInput(value.Get<Vector2>());
-	}
+		[FormerlySerializedAs("move")]
+		[Header("Character Input Values")]
+		public Vector2 Move;
 
-	public void OnLook(InputValue value)
-	{
-		if(cursorInputForLook)
+		[FormerlySerializedAs("look")]   public Vector2 Look;
+		[FormerlySerializedAs("jump")]   public bool    Jump;
+		[FormerlySerializedAs("sprint")] public bool    Sprint;
+
+		[FormerlySerializedAs("analogMovement")]
+		[Header("Movement Settings")]
+		public bool AnalogMovement;
+
+		[FormerlySerializedAs("cursorLocked")]
+		[Header("Mouse Cursor Settings")]
+		public bool CursorLocked = true;
+
+		[FormerlySerializedAs("cursorInputForLook")]
+		public bool CursorInputForLook = true;
+
+		private void OnApplicationFocus(bool hasFocus) => SetCursorState(CursorLocked);
+
+		// ReSharper disable once MemberCanBePrivate.Global
+		public void MoveInput(Vector2 newMoveDirection) => Move = newMoveDirection;
+
+		// ReSharper disable once MemberCanBePrivate.Global
+		public void LookInput(Vector2 newLookDirection) => Look = newLookDirection;
+
+		// ReSharper disable once MemberCanBePrivate.Global
+		public void JumpInput(bool newJumpState) => Jump = newJumpState;
+
+		// ReSharper disable once MemberCanBePrivate.Global
+		public void SprintInput(bool newSprintState) => Sprint = newSprintState;
+
+		private static void SetCursorState(bool newState) => Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+
+	#if ENABLE_INPUT_SYSTEM
+		public void OnMove(InputValue value) => MoveInput(value.Get<Vector2>());
+
+		public void OnLook(InputValue value)
 		{
-			LookInput(value.Get<Vector2>());
+			if (CursorInputForLook)
+				LookInput(value.Get<Vector2>());
 		}
-	}
 
-	public void OnJump(InputValue value)
-	{
-		JumpInput(value.isPressed);
-	}
+		public void OnJump(InputValue value) => JumpInput(value.isPressed);
 
-	public void OnSprint(InputValue value)
-	{
-		SprintInput(value.isPressed);
-	}
-#endif
-	
-	public void MoveInput(Vector2 newMoveDirection)
-	{
-		move = newMoveDirection;
-	} 
-
-	public void LookInput(Vector2 newLookDirection)
-	{
-		look = newLookDirection;
-	}
-
-	public void JumpInput(bool newJumpState)
-	{
-		jump = newJumpState;
-	}
-
-	public void SprintInput(bool newSprintState)
-	{
-		sprint = newSprintState;
-	}
-		
-	private void OnApplicationFocus(bool hasFocus)
-	{
-		SetCursorState(cursorLocked);
-	}
-
-	private void SetCursorState(bool newState)
-	{
-		Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+		public void OnSprint(InputValue value) => SprintInput(value.isPressed);
+	#endif
 	}
 }

@@ -1,19 +1,25 @@
-using UnityEngine;
+using Euphelia.Instantiation;
+using Euphelia.Multiplayer;
 using SwiftLocator.Services.ServiceLocatorServices;
+using UnityEngine;
 
-public class Initializer : IPreliminarySetup
+namespace Euphelia.Initialization
 {
-    private const string P2P_NETWORK_MANAGER_PREFAB_NAME = "Network Manager";
-    public void Setup()
-    {
-        if (!Application.isPlaying)
-            return;
+	public class Initializer : IPreliminarySetup
+	{
+		private const string NETWORK_MANAGER_PREFAB_NAME = "Network Manager";
 
-        ServiceLocator.SingletonRegistrator
-            .Register(_ => 
-            {
-                var prefab = Resources.Load<CustomNetworkManager>(P2P_NETWORK_MANAGER_PREFAB_NAME);
-                return Instantiator.InstantiateAndDontDestroy(prefab);
-            });
-    }
+		public void Setup()
+		{
+			if (!Application.isPlaying)
+				return;
+
+			ServiceLocator.SingletonRegistrator
+			              .Register(_ =>
+			              {
+				              var prefab = Resources.Load<CustomNetworkManager>(NETWORK_MANAGER_PREFAB_NAME);
+				              return Instantiator.InstantiateAndDontDestroy(prefab);
+			              });
+		}
+	}
 }
