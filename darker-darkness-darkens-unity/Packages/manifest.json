@@ -8,6 +8,7 @@
     "com.unity.inputsystem": "1.7.0",
     "com.unity.nuget.mono-cecil": "1.10.2",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.unity.postprocessing": "3.4.0",
     "com.unity.render-pipelines.universal": "17.0.2",
     "com.unity.test-framework": "1.4.3",
     "com.unity.timeline": "1.8.6",
