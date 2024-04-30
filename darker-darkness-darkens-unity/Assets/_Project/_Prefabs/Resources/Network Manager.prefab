@@ -59,7 +59,7 @@ MonoBehaviour:
   autoStartServerBuild: 0
   autoConnectClientBuild: 0
   offlineScene: 
-  onlineScene: Assets/Scenes/Cabin.unity
+  onlineScene: Assets/_Project/Scenes/Cabin.unity
   transport: {fileID: 6465910832306015698}
   networkAddress: 192.168.1.199
   maxConnections: 5
@@ -87,8 +87,6 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  _voiceChatPrefab: {fileID: 8237962200384571329, guid: ca0d526101d29e1439325c6b29b287ff,
-    type: 3}
 --- !u!114 &6465910832306015698
 MonoBehaviour:
   m_ObjectHideFlags: 0
