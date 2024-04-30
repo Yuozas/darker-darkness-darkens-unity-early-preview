@@ -18,7 +18,18 @@ namespace Euphelia.Player
 		[SerializeField]
 		private GameObject _playerInputPrefab;
 
-		[Header("Voice chat")][SerializeField] private GameObject _voiceChatPrefab;
+		[Header("Voice handler")]
+		[SerializeField]
+		private GameObject _playerVoiceHandlerPrefab;
+
+		private GameObject _playerCameraInstance;
+		private GameObject _playerInputInstance;
+
+		private void OnDestroy()
+		{
+			Destroy(_playerCameraInstance);
+			Destroy(_playerInputInstance);
+		}
 
 		public override void OnStartLocalPlayer()
 		{
@@ -27,35 +38,33 @@ namespace Euphelia.Player
 
 			Debug.Log($"Started setup for netId:{netId}");
 
-			var playerCameraInstance = Instantiate(_playerCameraPrefab);
+			_playerCameraInstance = Instantiate(_playerCameraPrefab);
 			Debug.Log("Camera instantiated.");
 
-			SpawnPlayerPrefabs(connectionToClient);
-			// var voiceChatInstance = Instantiate(_voiceChatPrefab);
+			SpawnPlayerControlledPrefabs();
 			Debug.Log("Voice instantiated.");
-			// NetworkServer.Spawn(voiceChatInstance, connectionToClient);
 
-			var virtualCamera = playerCameraInstance.GetComponentInChildren<CinemachineVirtualCamera>();
+			var virtualCamera = _playerCameraInstance.GetComponentInChildren<CinemachineVirtualCamera>();
 			virtualCamera.Follow = _cinemachineCameraTarget.transform;
 			Debug.Log("Camera setup for local player.");
 
-			var playerInputInstance = Instantiate(_playerInputPrefab);
+			_playerInputInstance = Instantiate(_playerInputPrefab);
 			Debug.Log("Player Input instantiated.");
 
-			var playerInput                  = playerInputInstance.GetComponent<PlayerInput>();
-			var inputs                       = playerInputInstance.GetComponent<Inputs>();
+			var playerInput                  = _playerInputInstance.GetComponent<PlayerInput>();
+			var inputs                       = _playerInputInstance.GetComponent<Inputs>();
 			var firstPersonNetworkController = GetComponent<FirstPersonNetworkController>();
 			firstPersonNetworkController.SetupPlayerInput(playerInput, inputs);
-			playerInput.camera = playerCameraInstance.GetComponentInChildren<Camera>();
+			playerInput.camera = _playerCameraInstance.GetComponentInChildren<Camera>();
 
 			Debug.Log("Input setup for local player.");
 		}
 
 		[Command]
-		private void SpawnPlayerPrefabs(NetworkConnectionToClient senderConnection)
+		private void SpawnPlayerControlledPrefabs()
 		{
-			var voiceChatInstance = Instantiate(_voiceChatPrefab, transform);
-			NetworkServer.Spawn(voiceChatInstance, senderConnection);
+			var voiceManager = Instantiate(_playerVoiceHandlerPrefab);
+			NetworkServer.Spawn(voiceManager, connectionToClient);
 		}
 	}
 }
